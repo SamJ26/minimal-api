@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using MinimalApi.Modules.Invitations.Services;
 
@@ -19,13 +18,14 @@ public sealed class GetInvitationStatusEndpoint : IEndpoint
             .WithOpenApi();
     }
     
-    private static Task<Ok<GetInvitationStatusResponse>> HandleAsync(
+    private static IResult HandleAsync(
         [FromQuery] string token,
         [FromServices] InvitationsManager invitationsManager,
-        [FromServices] ILogger<GetInvitationStatusEndpoint> logger)
+        [FromServices] ILogger<GetInvitationStatusEndpoint> logger,
+        CancellationToken ct)
     {
         logger.LogInformation("Value of token from query string is: {Value}", token);
         var isValid = invitationsManager.Verify(token);
-        return Task.FromResult(TypedResults.Ok(new GetInvitationStatusResponse() { IsValid = isValid }));
+        return Results.Ok(new GetInvitationStatusResponse() { IsValid = isValid });
     }
 }

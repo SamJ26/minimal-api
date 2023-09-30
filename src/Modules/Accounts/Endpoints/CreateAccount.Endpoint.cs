@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MinimalApi.Modules.Accounts.Endpoints;
@@ -17,11 +18,20 @@ public sealed class CreateAccountEndpoint : IEndpoint
             .WithOpenApi();
     }
     
-    private static Task<IResult> HandleAsync(
+    private static IResult HandleAsync(
         [FromBody] CreateAccountRequest req,
-        [FromServices] ILogger<CreateAccountEndpoint> logger)
+        [FromServices] IValidator<CreateAccountRequest> validator,
+        [FromServices] ILogger<CreateAccountEndpoint> logger,
+        CancellationToken ct)
     {
+        var validationResult = validator.Validate(req);
+        if (!validationResult.IsValid)
+        {
+            return TypedResults.ValidationProblem(validationResult.ToDictionary());
+        }
+        
         logger.LogInformation(req.ToString());
-        return Task.FromResult<IResult>(TypedResults.StatusCode(201));
+        
+        return Results.StatusCode(201);
     }
 }

@@ -1,4 +1,6 @@
+using FluentValidation;
 using MinimalApi.Modules.Accounts;
+using MinimalApi.Modules.Accounts.Endpoints;
 using MinimalApi.Modules.Invitations;
 
 namespace MinimalApi;
@@ -15,6 +17,9 @@ public class Program
         // Enable generation of OpenAPI docs
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        
+        // Services for validation
+        builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
         // Adding services required for modules
         builder.Services.AddAccountsModule();
