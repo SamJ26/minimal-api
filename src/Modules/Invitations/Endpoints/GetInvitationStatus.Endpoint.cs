@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MinimalApi.Helpers;
 using MinimalApi.Modules.Invitations.Services;
 
 namespace MinimalApi.Modules.Invitations.Endpoints;

@@ -1,6 +1,5 @@
 using FluentValidation;
 using MinimalApi.Modules.Accounts;
-using MinimalApi.Modules.Accounts.Endpoints;
 using MinimalApi.Modules.Invitations;
 
 namespace MinimalApi;

@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using MinimalApi.Helpers;
 
 namespace MinimalApi.Modules.Accounts.Endpoints;
 
@@ -9,6 +10,7 @@ public sealed class CreateAccountEndpoint : IEndpoint
     {
         builder.MapPost("", HandleAsync)
             .AllowAnonymous()
+            .RequireRequestValidation()
             .Produces(201)
             .ProducesProblem(400)
             .ProducesProblem(401)
@@ -17,21 +19,13 @@ public sealed class CreateAccountEndpoint : IEndpoint
             .WithSummary("Request for AS")
             .WithOpenApi();
     }
-    
+
     private static IResult HandleAsync(
         [FromBody] CreateAccountRequest req,
-        [FromServices] IValidator<CreateAccountRequest> validator,
         [FromServices] ILogger<CreateAccountEndpoint> logger,
         CancellationToken ct)
     {
-        var validationResult = validator.Validate(req);
-        if (!validationResult.IsValid)
-        {
-            return TypedResults.ValidationProblem(validationResult.ToDictionary());
-        }
-        
         logger.LogInformation(req.ToString());
-        
         return Results.StatusCode(201);
     }
 }

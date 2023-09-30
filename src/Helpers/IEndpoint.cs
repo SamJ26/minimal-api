@@ -1,4 +1,4 @@
-namespace MinimalApi;
+namespace MinimalApi.Helpers;
 
 public interface IEndpoint
 {
